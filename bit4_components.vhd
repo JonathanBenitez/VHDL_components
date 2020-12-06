@@ -27,6 +27,14 @@ port ( x : in std_logic_vector(3 downto 0);
 );
 end component;
 
+component bit4_half_adder is
+port( x : in std_logic_vector(3 downto 0);
+      y : in std_logic_vector(3 downto 0);
+      z : out std_logic_vector(3 downto 0);
+      c_out : out std_logic
+);
+end component;
+
 component bit4_adder is
 port ( x : in std_logic_vector(3 downto 0);
        y : in std_logic_vector(3 downto 0);
@@ -46,19 +54,12 @@ end component;
 
 component bit4_decrementer is
 port( x : in std_logic_vector(3 downto 0);
-      c : in std_logic;
+      b : in std_logic;
       z : out std_logic_vector(3 downto 0);
-      c_out : out std_logic
+      b_out : out std_logic
 );
 end component;
 
-component bit4_half_adder is
-port( x : in std_logic_vector(3 downto 0);
-      y : in std_logic_vector(3 downto 0);
-      z : out std_logic_vector(3 downto 0);
-      c_out : out std_logic
-);
-end component;
 end bit4_components_pack;
 
 
@@ -273,51 +274,51 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity bit4_decrementer is
 port( x : in std_logic_vector(3 downto 0);
-      c : in std_logic;
+      b : in std_logic;
       z : out std_logic_vector(3 downto 0);
-      c_out :out std_logic
+      b_out :out std_logic
 );
 end entity;
 
 architecture behavioral of bit4_decrementer is 
 component half_sub is
 port( x, y : in std_logic;
-      z, c_out : out std_logic);
+      z, b_out : out std_logic);
 end component;
 
-signal carry : std_logic_vector(2 downto 0);
+signal borrow : std_logic_vector(2 downto 0);
 
 begin
 
 hs0: half_sub
 port map(
     x => x(0),
-    y => c,
+    y => b,
     z => z(0),
-    c_out => carry(0)
+    b_out => borrow(0)
 );
 
 hs1: half_sub
 port map(
    x => x(1),
-   y => carry(0),
+   y => borrow(0),
    z => z(1),
-   c_out => carry(1)
+   b_out => borrow(1)
 );
 
 hs2: half_sub
 port map(
    x => x(2),
-   y => carry(1),
+   y => borrow(1),
    z => z(2),
-   c_out => carry(2)
+   b_out => borrow(2)
 );
 hs3: half_sub
 port map(
    x => x(3),
-   y => carry(2),
+   y => borrow(2),
    z => z(3),
-   c_out => c_out
+   b_out => b_out
 );
 end behavioral;
 

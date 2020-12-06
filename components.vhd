@@ -53,7 +53,16 @@ component half_sub is
 port( x : in std_logic;
       y : in std_logic;
       z : out std_logic;
-      c_out : out std_logic
+      b_out : out std_logic
+);
+end component;
+
+component full_sub is
+port( x : in std_logic;
+      y : in std_logic;
+      b : in std_logic;
+      z : out std_logic;
+      b_out : out std_logic
 );
 end component;
 
@@ -135,6 +144,7 @@ end Behavioral;
 ---------------------------
 ----- HALF SUBTRACTOR -----
 ---------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -143,7 +153,7 @@ entity half_sub is
 port( x : in std_logic;
       y : in std_logic;
       z : out std_logic;
-      c_out : out std_logic
+      b_out : out std_logic
     );
 end half_sub;
 
@@ -151,10 +161,40 @@ architecture behavioral of half_sub is
 begin
 
 z <= x xor y;
-c_out <= (not x) and y;
+b_out <= (not x) and y;
 
 end behavioral;
 
+---------------------------
+----- FULL SUBTRACTOR -----
+---------------------------
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity full_sub is
+port( x : in std_logic;
+      y : in std_logic;
+      b : in std_logic;
+      z : out std_logic;
+      b_out : out std_logic
+);
+end entity;
+
+architecture behavioral of full_sub is
+signal a, c, d : std_logic;
+
+begin
+
+a <= b xor y;
+d <= y and b;
+c <= a and (not x);
+
+b_out <= c or d;
+z <= a xor x;
+
+end behavioral;
 ---------------------------
 -------- DEBOUNCER --------
 ---------------------------

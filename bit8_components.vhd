@@ -41,9 +41,9 @@ end component;
 
 component bit8_decrementer is
 port ( x : in std_logic_vector(7 downto 0);
-       c : out std_logic;
+       b : in std_logic;
        z : out std_logic_vector(7 downto 0);
-       c_out : out std_logic
+       b_out : out std_logic
 );
 end component;
 
@@ -116,36 +116,36 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity bit8_decrementer is
 port ( x : in std_logic_vector(7 downto 0);
-       c : in std_logic;
+       b : in std_logic;
        z : out std_logic_vector(7 downto 0);
-       c_out : out std_logic
+       b_out : out std_logic
 );
 end entity;
 
 architecture behavioral of bit8_decrementer is
 component bit4_decrementer is
 port ( x : in std_logic_vector(3 downto 0);
-       c : in std_logic;
+       b : in std_logic;
        z : out std_logic_vector(3 downto 0);
-       c_out : out std_logic
+       b_out : out std_logic
 );
 end component;
-signal carry : std_logic;
+signal borrow : std_logic;
 
 begin
 
 decr0 : bit4_decrementer
 port map(x => x(3 downto 0),
-         c => c,
+         b => b,
          z => z(3 downto 0),
-         c_out => carry
+         b_out => borrow
 );
 
 decr1 : bit4_decrementer
 port map(x => x(7 downto 4),
-         c => carry,
+         b => borrow,
          z => z(7 downto 4),
-         c_out => c_out
+         b_out => b_out
 );
 
 end behavioral;
