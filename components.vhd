@@ -26,6 +26,62 @@
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+package components_pack is
+
+component half_adder is
+port( x : in std_logic;
+      y : in std_logic;
+      z : out std_logic;
+      c_out : out std_logic
+);
+end component;
+
+component full_adder is
+port( x : in std_logic;
+      y : in std_logic;
+      c : in std_logic;
+      z : out std_logic;
+      c_out : out std_logic
+);
+end component;
+
+component half_sub is
+port( x : in std_logic;
+      y : in std_logic;
+      z : out std_logic;
+      c_out : out std_logic
+);
+end component;
+
+component debouncer is
+port( clk : in std_logic;
+      rst : in std_logic;
+      button_in : in std_logic;
+      button_out : out std_logic
+);
+end component;
+
+component falling_edge_detector is
+port( input : in std_logic;
+      clk   : in std_logic;
+      rst   : in std_logic;
+      edge  : out std_logic
+);
+end component;
+
+component rising_edge_detector is
+port( input : in std_logic;
+      clk   : in std_logic;
+      rst   : in std_logic;
+      edge  : out std_logic
+);
+end component;
+
+end components_pack;
 ---------------------------
 ------- HALF  ADDER -------
 ---------------------------
@@ -109,7 +165,7 @@ use ieee.numeric_std.all;
 
 entity debouncer is
    port ( clk        : in  std_logic;
-          reset      : in  std_logic;
+          rst        : in  std_logic;
           button_in  : in  std_logic;
           button_out : out std_logic
         );
@@ -125,7 +181,7 @@ begin
 process ( clk )
 begin
    if clk'event and clk = '1' then
-      if reset = '1' then
+      if rst = '1' then
          count <= (others => '0');
       else
          count <= count + 1;

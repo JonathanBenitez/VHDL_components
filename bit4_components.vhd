@@ -16,6 +16,51 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+package bit4_components_pack is
+component bit4_multiplier is
+port ( x : in std_logic_vector(3 downto 0);
+       y : in std_logic_vector(3 downto 0);
+       z : out std_logic_vector(7 downto 0)
+);
+end component;
+
+component bit4_adder is
+port ( x : in std_logic_vector(3 downto 0);
+       y : in std_logic_vector(3 downto 0);
+       c : in std_logic;
+       z : out std_logic_vector(3 downto 0);
+       c_out : out std_logic
+);
+end component;
+
+component bit4_incrementer is 
+port( x : in std_logic_vector(3 downto 0);
+      c : in std_logic;
+      z : out std_logic_vector(3 downto 0);
+      c_out : out std_logic
+);
+end component;
+
+component bit4_decrementer is
+port( x : in std_logic_vector(3 downto 0);
+      c : in std_logic;
+      z : out std_logic_vector(3 downto 0);
+      c_out : out std_logic
+);
+end component;
+
+component bit4_half_adder is
+port( x : in std_logic_vector(3 downto 0);
+      y : in std_logic_vector(3 downto 0);
+      z : out std_logic_vector(3 downto 0);
+      c_out : out std_logic
+);
+end component;
+end bit4_components_pack;
+
 
 ---------------------------
 ---- 4BIT  MULTIPLIER  ----
@@ -103,7 +148,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity bit4_adder is
   Port ( x     : in std_logic_vector(3 downto 0);
          y     : in std_logic_vector(3 downto 0);
-         c_in  : in std_logic;
+         c     : in std_logic;
          z     : out std_logic_vector(3 downto 0);
          c_out : out std_logic 
          );
@@ -118,41 +163,41 @@ port ( x : in std_logic;
        c_out : out std_logic
 );
 end component;
-    signal c : std_logic_vector(2 downto 0);
+    signal carry : std_logic_vector(2 downto 0);
 begin
 
 f0_add : full_adder
 port map(
         x => x(0),
         y => y(0),
-        c => c_in,
+        c => c,
         z => z(0),
-        c_out => c(0)
+        c_out => carry(0)
 );
 
 f1_add : full_adder
 port map(
         x => x(1),
         y => y(1),
-        c => c(0),
+        c => carry(0),
         z => z(1),
-        c_out => c(1)
+        c_out => carry(1)
 );
 
 f2_add : full_adder
 port map(
         x => x(2),
         y => y(2),
-        c => c(1),
+        c => carry(1),
         z => z(2),
-        c_out => c(2)
+        c_out => carry(2)
 );
 
 f3_add : full_adder
 port map(
         x => x(3),
         y => y(3),
-        c => c(2),
+        c => carry(2),
         z => z(3),
         c_out => c_out
 );
@@ -275,3 +320,76 @@ port map(
    c_out => c_out
 );
 end behavioral;
+
+---------------------------
+---- 4BIT Half-Adder   ----
+---------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity bit4_half_adder is
+  Port ( x     : in std_logic_vector(3 downto 0);
+         y     : in std_logic_vector(3 downto 0);
+         z     : out std_logic_vector(3 downto 0);
+         c_out : out std_logic 
+         );
+end bit4_half_adder;
+
+architecture Behavioral of bit4_half_adder is
+component full_adder is
+port ( x : in std_logic;
+       y : in std_logic;
+       c : in std_logic;
+       z : out std_logic;
+       c_out : out std_logic
+);
+end component;
+
+component half_adder is
+port ( x : in std_logic;
+       y : in std_logic;
+       z : out std_logic;
+       c_out : out std_logic
+);
+end component;
+
+    signal c : std_logic_vector(2 downto 0);
+begin
+
+f0_add : half_adder
+port map(
+        x => x(0),
+        y => y(0),
+        z => z(0),
+        c_out => c(0)
+);
+
+f1_add : full_adder
+port map(
+        x => x(1),
+        y => y(1),
+        c => c(0),
+        z => z(1),
+        c_out => c(1)
+);
+
+f2_add : full_adder
+port map(
+        x => x(2),
+        y => y(2),
+        c => c(1),
+        z => z(2),
+        c_out => c(2)
+);
+
+f3_add : full_adder
+port map(
+        x => x(3),
+        y => y(3),
+        c => c(2),
+        z => z(3),
+        c_out => c_out
+);
+
+end Behavioral;
+
