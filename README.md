@@ -21,9 +21,12 @@ Inludes an
 Includes
 - full adder
 - half adder
+- full subtractor
 - half subtractor
 - debouncer
 - falling edge detector
 - rising edge detector
+
+# Testbench includes testbenches for all components
 
 Made by Jonathan Benitez
