@@ -36,11 +36,20 @@ port( x : in std_logic_vector(3 downto 0);
 end component;
 
 component bit4_adder is
-port ( x : in std_logic_vector(3 downto 0);
+port(  x : in std_logic_vector(3 downto 0);
        y : in std_logic_vector(3 downto 0);
        c : in std_logic;
        z : out std_logic_vector(3 downto 0);
        c_out : out std_logic
+);
+end component;
+
+component bit4_subtractor is
+port( x : in std_logic_vector(3 downto 0);
+      y : in std_logic_vector(3 downto 0);
+      b : in std_logic;
+      z : out std_logic_vector(3 downto 0);
+      b_out : out std_logic
 );
 end component;
 
@@ -394,3 +403,64 @@ port map(
 
 end Behavioral;
 
+---------------------------
+---- 4BIT SUBTRACTOR   ----
+---------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity bit4_subtractor is
+port( x : in std_logic_vector(3 downto 0);
+      y : in std_logic_vector(3 downto 0);
+      b : in std_logic;
+      z : out std_logic_vector(3 downto 0);
+      b_out : out std_logic
+);
+end bit4_subtractor;
+
+architecture behavioral of bit4_subtractor is
+component full_sub is
+port( x : in std_logic;
+      y : in std_logic;
+      b : in std_logic;
+      z : out std_logic;
+      b_out : out std_logic
+);
+end component;
+
+signal borrow : std_logic_vector(2 downto 0);
+
+begin
+f0 : full_sub
+port map( x => x(0),
+          y => y(0),
+          b => b,
+          z => z(0),
+          b_out => borrow(0)
+);
+
+f1 : full_sub
+port map( x => x(1),
+          y => y(1),
+          b => borrow(0),
+          z => z(1),
+          b_out => borrow(1)
+);
+
+f2 : full_sub
+port map( x => x(2),
+          y => y(2),
+          b => borrow(1),
+          z => z(2),
+          b_out => borrow(2)
+);
+
+f3 : full_sub
+port map( x => x(3),
+          y => y(3),
+          b => borrow(2),
+          z => z(3),
+          b_out => b_out
+);
+
+end behavioral;

@@ -41,8 +41,9 @@ architecture Behavioral of bit8_components_TB is
 signal x, y : std_logic_vector(7 downto 0) := (others => '0');
 signal c    : std_logic := '0';
 signal z_mult : std_logic_vector(15 downto 0);
-signal z_incr, z_decr, z_add: std_logic_vector(7 downto 0);
-signal c_incr, b_decr, c_add: std_logic;
+signal z_incr, z_decr, z_add, z_sub : std_logic_vector(7 downto 0);
+signal c_incr, b_decr, c_add, b_sub : std_logic;
+
 begin
 
 multi : bit8_multiplier 
@@ -71,6 +72,14 @@ port map( x => x,
           c => c,
           z => z_add,
           c_out => c_add
+);
+
+sub : bit8_subtractor
+port map( x => x,
+          y => y,
+          b => c,
+          z => z_sub,
+          b_out => b_sub
 );
 
 c <= not c after 5 ns;

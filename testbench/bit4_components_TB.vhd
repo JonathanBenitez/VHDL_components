@@ -40,8 +40,8 @@ architecture Behavioral of bit4_components_TB is
 signal x, y : std_logic_vector(3 downto 0) := "0000";
 signal c : std_logic := '0';
 signal z_mult : std_logic_vector(7 downto 0);
-signal z_add, z_hfadd, z_incr, z_decr : std_logic_vector(3 downto 0);
-signal c_add, c_hfadd, c_incr, b_decr : std_logic;
+signal z_add, z_hfadd, z_incr, z_decr, z_sub : std_logic_vector(3 downto 0);
+signal c_add, c_hfadd, c_incr, b_decr, b_sub : std_logic;
 
 begin
 
@@ -90,5 +90,13 @@ port map( x => x,
           b => c,
           z => z_decr,
           b_out => b_decr
+);
+
+subtractor : bit4_subtractor
+port map( x => x,
+          y => y,
+          b => c,
+          z => z_sub,
+          b_out => b_sub
 );
 end Behavioral;

@@ -56,6 +56,15 @@ port( x : in std_logic_vector(7 downto 0);
 );
 end component;
 
+component bit8_subtractor is
+port( x : in std_logic_vector(7 downto 0);
+      y : in std_logic_vector(7 downto 0);
+      b : in std_logic;
+      z : out std_logic_vector(7 downto 0);
+      b_out : out std_logic
+);
+end component;
+
 component bit8_multiplier is
 port( x : in std_logic_vector(7 downto 0);
       y : in std_logic_vector(7 downto 0);
@@ -193,6 +202,53 @@ port map( x => x(7 downto 4),
           c => carry,
           z => z(7 downto 4),
           c_out => c_out
+);
+
+end behavioral;
+
+---------------------------
+---- 4BIT SUBTRACTOR   ----
+---------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity bit8_subtractor is
+port( x : in std_logic_vector(7 downto 0);
+      y : in std_logic_vector(7 downto 0);
+      b : in std_logic;
+      z : out std_logic_vector(7 downto 0);
+      b_out : out std_logic
+);
+end bit8_subtractor;
+
+architecture behavioral of bit8_subtractor is
+component bit4_subtractor is
+port( x : in std_logic_vector(3 downto 0);
+      y : in std_logic_vector(3 downto 0);
+      b : in std_logic;
+      z : out std_logic_vector(3 downto 0);
+      b_out : out std_logic
+);
+end component;
+
+signal borrow : std_logic;
+
+begin
+
+sub0 : bit4_subtractor
+port map( x => x(3 downto 0),
+          y => y(3 downto 0),
+          b => b,
+          z => z(3 downto 0),
+          b_out => borrow
+);
+
+sub1 : bit4_subtractor
+port map( x => x(7 downto 4),
+          y => y(7 downto 4),
+          b => borrow,
+          z => z(7 downto 4),
+          b_out => b_out
 );
 
 end behavioral;
